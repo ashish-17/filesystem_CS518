@@ -23,10 +23,27 @@
 // maintain bbfs state in here
 #include <limits.h>
 #include <stdio.h>
+#include <stdint.h>
+#include "list.h"
+
+typedef struct {
+	int id;
+	list_t node;
+} sfs_free_list;
+
 struct sfs_state {
     FILE *logfile;
     char *diskfile;
+
+    sfs_free_list* state_inodes; // Array of list nodes for all inodes state info
+    sfs_free_list* state_data_blocks; // Array of data block nodes for all data blocks
+
+    list_t* free_inodes;
+    list_t* free_data_blocks;
+
+    uint32_t ino_root;
 };
+
 #define SFS_DATA ((struct sfs_state *) fuse_get_context()->private_data)
 
 #endif

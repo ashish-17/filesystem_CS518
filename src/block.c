@@ -68,3 +68,23 @@ int block_write(const int block_num, const void *buf)
     return retstat;
 }
 
+/** Write a block to an open file with padding of 0s is size is less than block_size
+ *
+ * Write should return exactly @BLOCK_SIZE except on error.
+ */
+int block_write_padded(const int block_num, const void *buf, int size)
+{
+    int retstat = 0;
+    char tmp_buffer[BLOCK_SIZE];
+    memset(tmp_buffer, '0', sizeof(tmp_buffer));
+
+    retstat = pwrite(diskfile, tmp_buffer, BLOCK_SIZE, block_num*BLOCK_SIZE);
+    if (retstat >= 0) {
+        retstat = pwrite(diskfile, buf, size, block_num*BLOCK_SIZE);
+    }
+
+    if (retstat < 0)
+    	perror("block_write failed");
+
+    return retstat;
+}

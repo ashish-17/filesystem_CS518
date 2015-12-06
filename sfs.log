@@ -1,0 +1,77 @@
+
+sfs_init()
+    conn:
+    proto_major = 7
+    proto_minor = 22
+    async_read = 1
+    max_write = 131072
+    max_readahead = 131072
+    capable = 00000ffb
+    want = 00000010
+    context:
+    fuse = 0136a510
+    uid = 0
+    gid = 0
+    pid = 0
+    private_data = 0136a010
+    logfile = 0136a030
+    diskfile = /home/ashish/workspace/code/c/filesystem_CS512/testfsfile
+    umask = 00000
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_getattr(path="/.Trash", statbuf=0xb12edc20)
+
+sfs_getattr(path="/.xdg-volume-info", statbuf=0xb0aecc20)
+
+sfs_getattr(path="/autorun.inf", statbuf=0xb12edc20)
+
+sfs_getattr(path="/.Trash-1001", statbuf=0xb1aeec20)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_opendir(path="/", fi=0xb1aeec50)
+
+sfs_getattr(path="/autorun.inf", statbuf=0xb1aeec20)
+
+sfs_getattr(path="/", statbuf=0xb0aecbf0)
+
+sfs_destroy(userdata=0x0136a010)

@@ -90,7 +90,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_sfs_OBJECTS = sfs.$(OBJEXT) log.$(OBJEXT) block.$(OBJEXT)
+am_sfs_OBJECTS = sfs.$(OBJEXT) log.$(OBJEXT) block.$(OBJEXT) \
+	inode.$(OBJEXT)
 sfs_OBJECTS = $(am_sfs_OBJECTS)
 sfs_LDADD = $(LDADD)
 sfs_DEPENDENCIES =
@@ -150,12 +151,12 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/ruilin/Downloads/assignment2/missing aclocal-1.14
+ACLOCAL = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing aclocal-1.14
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/ruilin/Downloads/assignment2/missing autoconf
-AUTOHEADER = ${SHELL} /home/ruilin/Downloads/assignment2/missing autoheader
-AUTOMAKE = ${SHELL} /home/ruilin/Downloads/assignment2/missing automake-1.14
+AUTOCONF = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing autoconf
+AUTOHEADER = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing autoheader
+AUTOMAKE = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing automake-1.14
 AWK = mawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
@@ -170,8 +171,8 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
 EXEEXT = 
-FUSE_CFLAGS = -D_FILE_OFFSET_BITS=64 -I/usr/local/include/fuse  
-FUSE_LIBS = -pthread -L/usr/local/lib -lfuse  
+FUSE_CFLAGS = -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  
+FUSE_LIBS = -pthread -lfuse  
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -182,7 +183,7 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/ruilin/Downloads/assignment2/missing makeinfo
+MAKEINFO = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = fuse-tutorial
@@ -200,10 +201,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 2014-06-12
-abs_builddir = /home/ruilin/Downloads/assignment2/src
-abs_srcdir = /home/ruilin/Downloads/assignment2/src
-abs_top_builddir = /home/ruilin/Downloads/assignment2
-abs_top_srcdir = /home/ruilin/Downloads/assignment2
+abs_builddir = /home/ashish/workspace/code/c/filesystem_CS512/src
+abs_srcdir = /home/ashish/workspace/code/c/filesystem_CS512/src
+abs_top_builddir = /home/ashish/workspace/code/c/filesystem_CS512
+abs_top_srcdir = /home/ashish/workspace/code/c/filesystem_CS512
 ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
@@ -222,7 +223,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/ruilin/Downloads/assignment2/install-sh
+install_sh = ${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -242,9 +243,9 @@ target_alias =
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
-sfs_SOURCES = sfs.c  fuse.h  log.c	log.h  params.h  block.c  block.h
-AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -I/usr/local/include/fuse  
-LDADD = -pthread -L/usr/local/lib -lfuse  
+sfs_SOURCES = sfs.c  fuse.h  log.c	log.h  params.h  block.c  block.h inode.c inode.h list.h
+AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  
+LDADD = -pthread -lfuse  
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -348,9 +349,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/sfs.Po
 include ./$(DEPDIR)/block.Po
+include ./$(DEPDIR)/inode.Po
 include ./$(DEPDIR)/log.Po
+include ./$(DEPDIR)/sfs.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

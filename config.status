@@ -437,7 +437,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/ruilin/Downloads/assignment2'
+ac_pwd='/home/ashish/workspace/code/c/filesystem_CS512'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
@@ -619,8 +619,8 @@ S["am__EXEEXT_FALSE"]=""
 S["am__EXEEXT_TRUE"]="#"
 S["LTLIBOBJS"]=""
 S["LIBOBJS"]=""
-S["FUSE_LIBS"]="-pthread -L/usr/local/lib -lfuse  "
-S["FUSE_CFLAGS"]="-D_FILE_OFFSET_BITS=64 -I/usr/local/include/fuse  "
+S["FUSE_LIBS"]="-pthread -lfuse  "
+S["FUSE_CFLAGS"]="-D_FILE_OFFSET_BITS=64 -I/usr/include/fuse  "
 S["PKG_CONFIG_LIBDIR"]=""
 S["PKG_CONFIG_PATH"]=""
 S["PKG_CONFIG"]="/usr/bin/pkg-config"
@@ -658,12 +658,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]=""
-S["install_sh"]="${SHELL} /home/ruilin/Downloads/assignment2/install-sh"
-S["MAKEINFO"]="${SHELL} /home/ruilin/Downloads/assignment2/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/ruilin/Downloads/assignment2/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /home/ruilin/Downloads/assignment2/missing automake-1.14"
-S["AUTOCONF"]="${SHELL} /home/ruilin/Downloads/assignment2/missing autoconf"
-S["ACLOCAL"]="${SHELL} /home/ruilin/Downloads/assignment2/missing aclocal-1.14"
+S["install_sh"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/install-sh"
+S["MAKEINFO"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing automake-1.14"
+S["AUTOCONF"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/ashish/workspace/code/c/filesystem_CS512/missing aclocal-1.14"
 S["VERSION"]="2014-06-12"
 S["PACKAGE"]="fuse-tutorial"
 S["CYGPATH_W"]="echo"

@@ -90,7 +90,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_sfs_OBJECTS = sfs.$(OBJEXT) log.$(OBJEXT) block.$(OBJEXT)
+am_sfs_OBJECTS = sfs.$(OBJEXT) log.$(OBJEXT) block.$(OBJEXT) \
+	inode.$(OBJEXT)
 sfs_OBJECTS = $(am_sfs_OBJECTS)
 sfs_LDADD = $(LDADD)
 sfs_DEPENDENCIES =
@@ -242,7 +243,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-sfs_SOURCES = sfs.c  fuse.h  log.c	log.h  params.h  block.c  block.h
+sfs_SOURCES = sfs.c  fuse.h  log.c	log.h  params.h  block.c  block.h inode.c inode.h list.h
 AM_CFLAGS = @FUSE_CFLAGS@
 LDADD = @FUSE_LIBS@
 all: config.h
@@ -348,9 +349,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/block.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfs.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

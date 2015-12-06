@@ -22,12 +22,36 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <time.h>
+#include "inode.h"
 
 #ifdef HAVE_SYS_XATTR_H
 #include <sys/xattr.h>
 #endif
 
 #include "log.h"
+
+#define SFS_MAGIC_NUM 1707
+
+typedef struct {
+	uint32_t magic;
+	uint32_t num_data_blocks; // Total number of data blocks on disk.
+	uint32_t num_free_blocks; // Total number of free blocks.
+	uint32_t num_inodes; // Total number of inodes on disk.
+	uint32_t bitmap_inode_blocks;
+	uint32_t bitmap_data_blocks;
+	uint32_t inode_root;  // Root directory.
+} sfs_superblock __attribute__((packed));
+
+/*
+ * Use the root directory to get the full path for the input relative path
+ */
+static void sfs_fullpath(char buffer[PATH_MAX], const char *path)
+{
+    strcpy(buffer, SFS_DATA->diskfile);
+    strncat(buffer, path, PATH_MAX);
+}
 
 
 ///////////////////////////////////////////////////////////
@@ -54,6 +78,156 @@ void *sfs_init(struct fuse_conn_info *conn)
     log_conn(conn);
     log_fuse_context(fuse_get_context());
 
+    disk_open(SFS_DATA->diskfile);
+    struct stat *statbuf = (struct stat*)malloc(sizeof(struct stat));
+    lstat(SFS_DATA->diskfile, statbuf);
+
+    // Check for first time initialization.
+    if (statbuf->st_size == 0) {
+
+    	// Step 1: Write super block to disk file
+    	sfs_superblock sb = {
+    			.magic = SFS_MAGIC_NUM,
+    			.num_data_blocks = SFS_NBLOCKS_DATA,
+				.num_free_blocks = SFS_NBLOCKS_DATA,
+				.num_inodes = SFS_NINODES,
+				.bitmap_inode_blocks = SFS_BLOCK_INODE_BITMAP,
+				.bitmap_data_blocks = SFS_BLOCK_DATA_BITMAP,
+				.inode_root = 0
+    	};
+
+    	block_write_padded(SFS_BLOCK_SUPERBLOCK, &sb, sizeof(sfs_superblock));
+
+    	//Step 2: Write inode bitmap
+    	int i = 0;
+    	char bitmap_inodes[BLOCK_SIZE];
+    	memset(bitmap_inodes, '1', sizeof(bitmap_inodes));
+    	for (i = 0; i < SFS_NBLOCKS_INODE_BITMAP; ++i) {
+        	block_write((SFS_BLOCK_INODE_BITMAP + i), bitmap_inodes);
+    	}
+
+    	//Step 3: Write data bitmap
+    	char bitmap_data[BLOCK_SIZE];
+    	memset(bitmap_data, '1', sizeof(bitmap_data));
+    	for (i = 0; i < SFS_NBLOCKS_DATA_BITMAP; ++i) {
+        	block_write((SFS_BLOCK_DATA_BITMAP + i), bitmap_data);
+    	}
+
+    	//Step 4: Write inode blocks
+    	char buffer_inode[BLOCK_SIZE];
+    	memset(buffer_inode, '0', sizeof(buffer_inode));
+    	for (i = 0; i < SFS_NBLOCKS_INODE; ++i) {
+        	block_write((SFS_BLOCK_INODES + i), buffer_inode);
+    	}
+
+    	//Step 5: Write data blocks
+    	char buffer_data[BLOCK_SIZE];
+    	memset(buffer_data, '0', sizeof(buffer_data));
+    	for (i = 0; i < SFS_NBLOCKS_DATA; ++i) {
+        	block_write((SFS_BLOCK_DATA + i), buffer_data);
+    	}
+
+    	//Step 6: Initialize the root inode
+    	if (block_read(SFS_BLOCK_INODE_BITMAP, bitmap_inodes) > 0) {
+    		bitmap_inodes[0] = '0';
+    		block_write(SFS_BLOCK_INODE_BITMAP, bitmap_inodes);
+    	}
+
+		if (block_read(SFS_BLOCK_DATA_BITMAP, bitmap_data) > 0) {
+			bitmap_data[0] = '0';
+			block_write(SFS_BLOCK_DATA_BITMAP, bitmap_data);
+		}
+
+		sfs_inode_t inode;
+		memset(&inode, 0, sizeof(inode));
+		inode.atime = inode.ctime = inode.mtime = time(NULL);
+		inode.nblocks = 1;
+		inode.ino = 0;
+		inode.blocks[0] = SFS_BLOCK_DATA;
+		inode.size = 0;
+		inode.nlink = 0;
+		inode.mode = S_IFDIR;
+
+		block_write_padded(SFS_BLOCK_INODES, &inode, sizeof(sfs_inode_t));
+    }
+
+    // Here we start the init process
+
+    // Step 1: Cache the state of inodes availability in fuse context
+
+    SFS_DATA->state_inodes = (sfs_free_list*)malloc(SFS_NINODES * sizeof(sfs_free_list));
+    memset(SFS_DATA->state_inodes, 0, SFS_NINODES * sizeof(sfs_free_list));
+
+    int i = 0, inodes_cached = 0;
+	char bitmap_inodes[BLOCK_SIZE];
+	int num_used_inodes = 0;
+	for (i = 0; i < SFS_NBLOCKS_INODE_BITMAP; ++i) {
+		block_read((SFS_BLOCK_INODE_BITMAP + i), bitmap_inodes);
+
+		int block_ptr = 0;
+		while((block_ptr < BLOCK_SIZE) && (inodes_cached < SFS_NINODES)) {
+			sfs_free_list *node = SFS_DATA->state_inodes + inodes_cached;
+			node->id = inodes_cached;
+			INIT_LIST_HEAD(&(node->node));
+			if (bitmap_inodes[block_ptr] == '1') {
+				if (SFS_DATA->free_inodes == NULL) {
+					SFS_DATA->free_inodes = &(node->node);
+				} else {
+					list_add_tail(&(node->node), SFS_DATA->free_inodes);
+				}
+			} else {
+				num_used_inodes++;
+			}
+
+			++inodes_cached;
+			++block_ptr;
+		}
+	}
+
+    log_msg("\nsfs_init() num_used_inodes = %d", num_used_inodes);
+
+    // Step 2: Cache the state of data block's availability in fuse context
+
+    SFS_DATA->state_data_blocks = (sfs_free_list*)malloc(SFS_NBLOCKS_DATA * sizeof(sfs_free_list));
+    memset(SFS_DATA->state_data_blocks, 0, SFS_NBLOCKS_DATA * sizeof(sfs_free_list));
+
+	int data_blocks_cached = 0;
+	char bitmap_data[BLOCK_SIZE];
+	int num_used_data_blocks = 0;
+	for (i = 0; i < SFS_NBLOCKS_DATA_BITMAP; ++i) {
+		block_read((SFS_BLOCK_DATA_BITMAP + i), bitmap_data);
+
+		int block_ptr = 0;
+		while ((block_ptr < BLOCK_SIZE) && (data_blocks_cached < SFS_NBLOCKS_DATA)) {
+			sfs_free_list *node = SFS_DATA->state_data_blocks + data_blocks_cached;
+			node->id = data_blocks_cached;
+			INIT_LIST_HEAD(&(node->node));
+			if (bitmap_data[block_ptr] == '1') {
+				if (SFS_DATA->free_data_blocks == NULL) {
+					SFS_DATA->free_data_blocks = &(node->node);
+				} else {
+					list_add_tail(&(node->node), SFS_DATA->free_data_blocks);
+				}
+			} else {
+				++num_used_data_blocks;
+			}
+
+			++data_blocks_cached;
+			++block_ptr;
+		}
+	}
+
+    log_msg("\nsfs_init() num_used_data_blocks = %d", num_used_data_blocks);
+
+    // Step 3: Cache root's inode number
+    char buffer_super_block[BLOCK_SIZE];
+	block_read(SFS_BLOCK_SUPERBLOCK, buffer_super_block);
+	sfs_superblock sb;
+	memcpy(&sb, buffer_super_block, sizeof(sb));
+
+	SFS_DATA->ino_root = sb.inode_root;
+    log_msg("\nsfs_init() ino_root = %d", SFS_DATA->ino_root);
+
     return SFS_DATA;
 }
 
@@ -67,6 +241,7 @@ void *sfs_init(struct fuse_conn_info *conn)
 void sfs_destroy(void *userdata)
 {
     log_msg("\nsfs_destroy(userdata=0x%08x)\n", userdata);
+    disk_close();
 }
 
 /** Get file attributes.
@@ -83,6 +258,29 @@ int sfs_getattr(const char *path, struct stat *statbuf)
     log_msg("\nsfs_getattr(path=\"%s\", statbuf=0x%08x)\n",
 	  path, statbuf);
     
+    uint32_t ino = path_2_ino(path);
+    if (ino != SFS_INVALID_INO) {
+    	log_msg("\nsfs_getattr path found");
+    	sfs_inode_t *inode = (sfs_inode_t*)malloc(sizeof(sfs_inode_t));
+    	get_inode(ino, inode);
+
+    	statbuf->st_dev = SFS_MAGIC_NUM;
+    	statbuf->st_ino = inode->ino;
+    	statbuf->st_mode = inode->mode;
+    	statbuf->st_nlink = inode->nlink;
+    	statbuf->st_uid = getuid();
+    	statbuf->st_gid = getgid();
+    	statbuf->st_rdev = 0;
+    	statbuf->st_size = inode->size;
+    	statbuf->st_blksize = BLOCK_SIZE;
+    	statbuf->st_blocks = inode->nblocks;
+    	statbuf->st_atime = inode->atime;
+    	statbuf->st_mtime = inode->mtime;
+    	statbuf->st_ctime = inode->ctime;
+    } else {
+    	log_msg("\nsfs_getattr path not found");
+    }
+
     return retstat;
 }
 
@@ -103,7 +301,6 @@ int sfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     int retstat = 0;
     log_msg("\nsfs_create(path=\"%s\", mode=0%03o, fi=0x%08x)\n",
 	    path, mode, fi);
-    
     
     return retstat;
 }
@@ -269,8 +466,7 @@ int sfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	       struct fuse_file_info *fi)
 {
     int retstat = 0;
-    
-    
+
     return retstat;
 }
 
@@ -328,7 +524,8 @@ int main(int argc, char *argv[])
     }
 
     // Pull the diskfile and save it in internal data
-    sfs_data->diskfile = argv[argc-2];
+    sfs_data->diskfile = realpath(argv[argc-2], NULL); // Save the absolute path of the diskfile
+    printf("%s", sfs_data->diskfile);
     argv[argc-2] = argv[argc-1];
     argv[argc-1] = NULL;
     argc--;
