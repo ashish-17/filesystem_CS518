@@ -8,6 +8,7 @@
 #include "inode.h"
 #include "params.h"
 #include "block.h"
+#include <errno.h>
 
  // Local functions
 void read_dentry_from_block(uint32_t block_id, sfs_dentry_t* dentries, int num_entries);
@@ -143,6 +144,35 @@ uint32_t create_inode(const char *path, mode_t mode) {
 	}
 
 	return SFS_INVALID_INO;
+}
+
+int remove_inode(const char *path) {
+	uint32_t ino_path = path_2_ino(path);
+	if (ino_path != SFS_INVALID_INO) {
+		sfs_inode_t inode_data;
+		get_inode(ino_path, &inode_data);
+
+		int num_blocks = inode_data.nblocks;
+		while (num_blocks > 0) {
+
+			free_block_no(inode_data.blocks[num_blocks - 1]);
+			update_block_bitmap(inode_data.blocks[num_blocks - 1], '1');
+
+			--num_blocks;
+		}
+
+		free_ino(inode_data.ino);
+		update_inode_bitmap(inode_data.ino, '1');
+
+		log_msg("inode removed..now proceeding to remove dentry");
+		remove_dentry(&inode_data, SFS_DATA->ino_root);
+
+		return 0;
+	} else {
+		log_msg("\nError no such path exists!");
+	}
+
+	return -ENOENT;
 }
 
 void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf) {
@@ -346,5 +376,75 @@ void create_dentry(const char *name, sfs_inode_t *inode, uint32_t ino_parent) {
 }
 
 void remove_dentry(sfs_inode_t *inode, uint32_t ino_parent) {
+	sfs_inode_t inode_parent;
+	get_inode(ino_parent, &inode_parent);
+	if (S_ISDIR(inode_parent.mode)) {
+		int num_blocks_read = 0;
+		int num_bytes_read = 0;
+		int num_entries = 0;
+		int entry_offset = 0;
 
+		while ((num_blocks_read < inode_parent.nblocks)
+				&& (num_bytes_read < inode_parent.size)) {
+			if (inode_parent.size - num_bytes_read < BLOCK_SIZE) {
+				num_entries = ((inode_parent.size - num_bytes_read) / SFS_DENTRY_SIZE);
+			} else {
+				num_entries = (BLOCK_SIZE / SFS_DENTRY_SIZE);
+			}
+
+			log_msg("\n read_dentries num_entries=%d", num_entries);
+
+			if (num_blocks_read < SFS_NDIR_BLOCKS) {
+				char buffer[BLOCK_SIZE];
+				block_read(SFS_BLOCK_DATA + inode_parent.blocks[num_blocks_read], buffer);
+
+				int entries_read = 0;
+				int bytes_read = 0;
+				while ((bytes_read < BLOCK_SIZE) && (entries_read < num_entries)) {
+					log_msg("\nread_dentry_from_block Entries read = %d", entries_read);
+					sfs_dentry_t dentry;
+					memcpy(&dentry, buffer + bytes_read, sizeof(sfs_dentry_t));
+					if (dentry.inode_number == inode->ino) {
+						log_msg("\nEntry to be deleted found");
+						// Now i am going to overwrite it with the last dentry
+
+						int total_entries = (inode_parent.size / SFS_DENTRY_SIZE);
+						if (total_entries > 1) {
+							int idx = (total_entries - 1) / (BLOCK_SIZE / SFS_DENTRY_SIZE);
+							int int_idx = (total_entries - 1) % (BLOCK_SIZE / SFS_DENTRY_SIZE);
+
+							char buffer_last[BLOCK_SIZE];
+							block_read(SFS_BLOCK_DATA + inode_parent.blocks[idx], buffer_last);
+							sfs_dentry_t dentry_last;
+							memcpy(&dentry_last, buffer_last + SFS_DENTRY_SIZE * int_idx, sizeof(sfs_dentry_t));
+
+							if (int_idx == 0) {
+								inode_parent.nblocks--;
+								free_block_no(inode_parent.blocks[idx]);
+								update_block_bitmap(inode_parent.blocks[idx], '1');
+							}
+
+							memcpy(buffer + bytes_read, &dentry_last, sizeof(sfs_dentry_t));
+							update_block_data(inode_parent.blocks[num_blocks_read], buffer);
+							inode_parent.size -= SFS_DENTRY_SIZE;
+						} else {
+							inode_parent.size -= SFS_DENTRY_SIZE;
+						}
+
+						update_inode_data(inode_parent.ino, &inode_parent);
+						log_msg("\n Item deleted successfully");
+						return;
+					}
+					++entries_read;
+					bytes_read += SFS_DENTRY_SIZE;
+				}
+			}
+
+			++num_blocks_read;
+			num_bytes_read += (num_entries * SFS_DENTRY_SIZE);
+			entry_offset += num_entries;
+		}
+	} else {
+		log_msg("\n Invalid inode number %d, not a directory", inode_parent.ino);
+	}
 }

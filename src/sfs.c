@@ -303,7 +303,7 @@ int sfs_unlink(const char *path)
 {
     int retstat = 0;
     log_msg("sfs_unlink(path=\"%s\")\n", path);
-
+    retstat = remove_inode(path);
     
     return retstat;
 }

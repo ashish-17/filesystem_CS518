@@ -70,6 +70,8 @@ void get_inode(uint32_t ino, sfs_inode_t *inode_data);
 
 uint32_t create_inode(const char *path, mode_t mode);
 
+int remove_inode(const char *path);
+
 void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf);
 
 void read_dentries(sfs_inode_t *inode_data, sfs_dentry_t* dentries);
