@@ -199,7 +199,7 @@ void read_dentry_from_block(uint32_t block_id, sfs_dentry_t* dentries, int num_e
 	int bytes_read = 0;
 	while ((bytes_read < BLOCK_SIZE) && (entries_read < num_entries)) {
 		log_msg("\nread_dentry_from_block Entries read = %d", entries_read);
-		memcpy(dentries + entries_read, buffer + bytes_read, SFS_DENTRY_SIZE);
+		memcpy(dentries + entries_read, buffer + bytes_read, sizeof(sfs_dentry_t));
 	    ++entries_read;
 	    bytes_read += SFS_DENTRY_SIZE;
 	}
@@ -330,22 +330,16 @@ void create_dentry(const char *name, sfs_inode_t *inode, uint32_t ino_parent) {
 	int num_dentries = (inode_parent.size / SFS_DENTRY_SIZE);
 	int idx = num_dentries / (BLOCK_SIZE / SFS_DENTRY_SIZE);
 	int int_idx = num_dentries % (BLOCK_SIZE / SFS_DENTRY_SIZE);
-	if (int_idx == 0) {
-		if (num_dentries != 0) {
-			inode_parent.blocks[idx] = get_block_no();
-			update_block_bitmap(inode_parent.blocks[idx], '0');
-		}
 
-		block_read(SFS_BLOCK_DATA + inode_parent.blocks[idx], buffer);
-		memcpy(buffer + (int_idx*SFS_DENTRY_SIZE), &dentry, sizeof(sfs_dentry_t));
-		block_write(SFS_BLOCK_DATA + inode_parent.blocks[idx], buffer);
-
+	if ((int_idx == 0) && (num_dentries != 0)) {
+		inode_parent.blocks[idx] = get_block_no();
+		update_block_bitmap(inode_parent.blocks[idx], '0');
 		inode_parent.nblocks += 1;
-	} else {
-		block_read(SFS_BLOCK_DATA + inode_parent.blocks[idx-1], buffer);
-		memcpy(buffer + (int_idx*SFS_DENTRY_SIZE), &dentry, sizeof(sfs_dentry_t));
-		block_write(SFS_BLOCK_DATA + inode_parent.blocks[idx-1], buffer);
 	}
+
+	block_read(SFS_BLOCK_DATA + inode_parent.blocks[idx], buffer);
+	memcpy(buffer + (int_idx * SFS_DENTRY_SIZE), &dentry, sizeof(sfs_dentry_t));
+	block_write(SFS_BLOCK_DATA + inode_parent.blocks[idx], buffer);
 
 	inode_parent.size += SFS_DENTRY_SIZE;
 	update_inode_data(inode_parent.ino, &inode_parent);
