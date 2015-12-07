@@ -199,12 +199,12 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 		}
 
 		if (offset != 0) {
+			int bytes_to_write = (BLOCK_SIZE - offset) > size ? size : (BLOCK_SIZE - offset);
 			block_read(SFS_BLOCK_INODES + inode_data->blocks[i], tmp_buf);
-			memcpy(tmp_buf + offset, buffer, BLOCK_SIZE - offset);
+			memcpy(tmp_buf + offset, buffer, bytes_to_write);
 			update_block_data(inode_data->blocks[i], tmp_buf);
 
-			bytes_written += BLOCK_SIZE - offset;
-
+			bytes_written += bytes_to_write;
 
 			log_msg("Offset = %d written %d bytes", offset, bytes_written);
 
@@ -216,7 +216,7 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 
 			bytes_written += bytes_to_write;
 
-			log_msg("Block id = %d written %d bytes", i, bytes_to_write);
+			log_msg("Block id = %d written %d bytes of %s", i, bytes_to_write, buffer);
 		}
 	}
 
@@ -226,6 +226,42 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 	update_inode_data(inode_data->ino, inode_data);
 
 	return bytes_written;
+}
+
+int read_inode(sfs_inode_t *inode_data, char* buffer, int size, int offset) {
+
+	int i = 0;
+	int orig_offset = offset;
+	char tmp_buf[BLOCK_SIZE];
+	int bytes_read = 0;
+	int num_new_blocks = 0;
+	int start_block_idx = (offset / BLOCK_SIZE);
+	offset = offset % BLOCK_SIZE;
+
+	for (i = start_block_idx; (bytes_read < inode_data->size) && (i < SFS_NDIR_BLOCKS);++i) {
+
+		if (offset != 0) {
+			int bytes_to_read = (BLOCK_SIZE - offset) > inode_data->size ? inode_data->size : (BLOCK_SIZE - inode_data->size);
+			block_read(SFS_BLOCK_INODES + inode_data->blocks[i], tmp_buf);
+			memcpy(buffer, tmp_buf + offset, bytes_to_read);
+
+			bytes_read += bytes_to_read;
+
+			log_msg("Offset = %d read %d bytes", offset, bytes_read);
+
+			offset = 0;
+		} else {
+			int bytes_to_read = (inode_data->size - bytes_read) > BLOCK_SIZE ? BLOCK_SIZE : (inode_data->size - bytes_to_read);
+			block_read(SFS_BLOCK_INODES + inode_data->blocks[i], tmp_buf);
+			memcpy(buffer + bytes_read, tmp_buf, bytes_to_read);
+
+			bytes_read += bytes_to_read;
+
+			log_msg("Block id = %d read %d bytes = %s", i, bytes_to_read, buffer);
+		}
+	}
+
+	return bytes_read;
 }
 
 void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf) {
