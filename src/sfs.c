@@ -387,7 +387,18 @@ int sfs_write(const char *path, const char *buf, size_t size, off_t offset,
     int retstat = 0;
     log_msg("\nsfs_write(path=\"%s\", buf=0x%08x, size=%d, offset=%lld, fi=0x%08x)\n",
 	    path, buf, size, offset, fi);
-    
+
+	uint32_t ino = path_2_ino(path);
+	if (ino != SFS_INVALID_INO) {
+		log_msg("\nsfs_write path found");
+		sfs_inode_t inode;
+		get_inode(ino, &inode);
+
+		retstat = write_inode(&inode, buf, size, offset);
+	} else {
+		log_msg("\nsfs_write path not found");
+		retstat = -ENOENT;
+	}
     
     return retstat;
 }

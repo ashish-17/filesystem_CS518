@@ -175,6 +175,59 @@ int remove_inode(const char *path) {
 	return -ENOENT;
 }
 
+int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offset) {
+
+	int capacity = (SFS_NDIR_BLOCKS - (offset / BLOCK_SIZE))*BLOCK_SIZE - (offset % BLOCK_SIZE);
+	if (size > capacity) {
+		log_msg("Can't write a file of this size");
+		return 0;
+	}
+
+	int i = 0;
+	int orig_offset = offset;
+	char tmp_buf[BLOCK_SIZE];
+	int bytes_written = 0;
+	int num_new_blocks = 0;
+	int start_block_idx = (offset / BLOCK_SIZE);
+	offset = offset % BLOCK_SIZE;
+
+	for (i = start_block_idx; (bytes_written < size) && (i < SFS_NDIR_BLOCKS);++i) {
+		if (i >= inode_data->nblocks) {
+			inode_data->blocks[i] = get_block_no();
+			++num_new_blocks;
+			log_msg("Allocated a new block for file");
+		}
+
+		if (offset != 0) {
+			block_read(SFS_BLOCK_INODES + inode_data->blocks[i], tmp_buf);
+			memcpy(tmp_buf + offset, buffer, BLOCK_SIZE - offset);
+			update_block_data(inode_data->blocks[i], tmp_buf);
+
+			bytes_written += BLOCK_SIZE - offset;
+
+
+			log_msg("Offset = %d written %d bytes", offset, bytes_written);
+
+			offset = 0;
+		} else {
+			int bytes_to_write = (size - bytes_written) > BLOCK_SIZE ? BLOCK_SIZE : (size - bytes_written);
+			memcpy(tmp_buf, buffer + bytes_written, bytes_to_write);
+			update_block_data(inode_data->blocks[i], tmp_buf);
+
+			bytes_written += bytes_to_write;
+
+			log_msg("Block id = %d written %d bytes", i, bytes_to_write);
+		}
+	}
+
+	inode_data->nblocks += num_new_blocks;
+	inode_data->size = (inode_data->size - orig_offset) + size;
+
+	update_inode_data(inode_data->ino, inode_data);
+
+	return bytes_written;
+}
+
 void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf) {
 	statbuf->st_dev = 0;
 	statbuf->st_ino = inode->ino;

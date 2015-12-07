@@ -72,6 +72,8 @@ uint32_t create_inode(const char *path, mode_t mode);
 
 int remove_inode(const char *path);
 
+int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offset);
+
 void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf);
 
 void read_dentries(sfs_inode_t *inode_data, sfs_dentry_t* dentries);

@@ -9,64 +9,48 @@ sfs_init()
     capable = 00000ffb
     want = 00000010
     context:
-    fuse = 0106c540
+    fuse = 00988540
     uid = 0
     gid = 0
     pid = 0
-    private_data = 0106b010
-    logfile = 0106c060
+    private_data = 00987010
+    logfile = 00988060
     diskfile = /home/ashish/workspace/code/c/filesystem_CS512/testfilefs
     umask = 00000
 
-sfs_init() num_used_inodes = 3
+sfs_init() num_used_inodes = 1
 sfs_init() here it is null
-sfs_init() num_used_data_blocks = 3
+sfs_init() num_used_data_blocks = 1
 sfs_init() ino_root = 0
-sfs_getattr(path="/.Trash", statbuf=0x51a33c20)
+sfs_opendir(path="/", fi=0xab545c50)
 
+sfs_getattr(path="/.Trash", statbuf=0xaad44c20)
+
+sfs_getattr(path="/", statbuf=0xab545bf0)
+
+sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=.Trash, 5, 6
-sfs_opendir(path="/", fi=0x51232c50)
-
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=.Trash, 5, 6
-path_2_ino: test else
-path_2_ino: test out
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
 path_2_ino: test outer
 sfs_getattr path not found
-sfs_getattr(path="/.xdg-volume-info", statbuf=0x50a31c20)
+sfs_getattr(path="/.xdg-volume-info", statbuf=0xaa543c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=.xdg-volume-info, 5, 16
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=.xdg-volume-info, 5, 16
-path_2_ino: test else
-path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path not found
-sfs_getattr(path="/autorun.inf", statbuf=0x51232c20)
+sfs_getattr(path="/.Trash-1001", statbuf=0xab545c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=autorun.inf, 5, 11
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=autorun.inf, 5, 11
-path_2_ino: test else
-path_2_ino: test out
+path_2_ino: test outer
+sfs_getattr path not found
+sfs_getattr(path="/autorun.inf", statbuf=0xaad44c20)
+
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
 path_2_ino: test outer
 sfs_getattr path not found
 sfs_readdir(path="/")
@@ -74,665 +58,311 @@ sfs_readdir(path="/")
 sfs_readdir path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/.Trash-1001", statbuf=0x50a31c20)
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaa543c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xab545c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaa543c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xab545c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaa543c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xab545c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaa543c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xab545c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaad44c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xaa543c50)
+
+sfs_readdir(path="/")
+
+sfs_readdir path found
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_getattr(path="/autorun.inf", statbuf=0xab545c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=.Trash-1001, 5, 11
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=.Trash-1001, 5, 11
-path_2_ino: test else
-path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path not found
-sfs_getattr(path="/1.txt", statbuf=0x51a33c20)
+sfs_getattr(path="/", statbuf=0xaa543bf0)
 
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
-path_2_ino: Dentry found ino = 1
-path_2_ino: test out
-path_2_ino: test outer
 sfs_getattr path found
- here block_offset=0 inside_block_offset=1
- inode number 1 successfully found
-sfs_getattr(path="/2.txt", statbuf=0x50a31c20)
-
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=2.txt, 5, 5
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
-path_2_ino: test out
-path_2_ino: test outer
+sfs_getattr(path="/", statbuf=0xaad44bf0)
+
 sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_opendir(path="/", fi=0x50a31c50)
+ here block_offset=0 inside_block_offset=0
+ inode number 0 successfully found
+sfs_opendir(path="/", fi=0xab545c50)
 
 sfs_readdir(path="/")
 
 sfs_readdir path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
+sfs_getattr(path="/", statbuf=0xaa543bf0)
 
-sfs_readdir(path="/")
-
-sfs_readdir path found
+sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/autorun.inf", statbuf=0x50a31c20)
+sfs_getattr(path="/1.txt", statbuf=0xaad44c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=autorun.inf, 5, 11
-path_2_ino: test else
-path_2_ino_internal Entry1 = 2.txt, path=autorun.inf, 5, 11
-path_2_ino: test else
-path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path not found
-sfs_getattr(path="/", statbuf=0x51232bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51a33c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/1.txt", statbuf=0x51a33c20)
+sfs_create(path="/1.txt", mode=0100664, fi=0xab545d10)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
-path_2_ino: Dentry found ino = 1
-path_2_ino: test out
 path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=1
- inode number 1 successfully found
-sfs_getattr(path="/", statbuf=0x50a31bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/", statbuf=0x51a33bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully foundsfs_unlink(path="/1.txt")
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
-path_2_ino: Dentry found ino = 1
-path_2_ino: test out
-path_2_ino: test outer
- here block_offset=0 inside_block_offset=1
- inode number 1 successfully found
-Success: Data block added to the free list
-update_block_bitmap Successful update
-Success: Inode added to the free list
-update_inode_bitmap Successful updateinode removed..now proceeding to remove dentry
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-Entry to be deleted found
-update_block_data Successful update
-update_inode_data Successful update
- Item deleted successfully
-sfs_getattr(path="/", statbuf=0x50a31bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-sfs_getattr(path="/2.txt", statbuf=0x50a31c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_getattr(path="/", statbuf=0x50a31bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_getattr(path="/3.txt", statbuf=0x51232c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path not found
-sfs_create(path="/3.txt", mode=0100664, fi=0x51a33d10)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino: test out
-path_2_ino: test outer
-Success: Free ino found = 3
-Success: Free data block found = 3
+Success: Free ino found = 1
+Success: Free data block found = 1
 update_inode_bitmap Successful update
 update_block_bitmap Successful update
 update_inode_data Successful update
-create_dentry path=3.txt ino = 3 ino_parent=0
+create_dentry path=1.txt ino = 1 ino_parent=0
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
 update_inode_data Successful update
-File creation success inode = 3
-sfs_getattr(path="/3.txt", statbuf=0x51a33be0)
+File creation success inode = 1
+sfs_getattr(path="/1.txt", statbuf=0xab545be0)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
+path_2_ino_internal num_dentries=1
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino_internal Entry1 = 3.txt, path=3.txt, 5, 5
-path_2_ino: Dentry found ino = 3
+path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
+path_2_ino: Dentry found ino = 1
 path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path found
- here block_offset=0 inside_block_offset=3
- inode number 3 successfully found
-sfs_release(path="/3.txt", fi=0x51a33d10)
+ here block_offset=0 inside_block_offset=1
+ inode number 1 successfully found
+sfs_release(path="/1.txt", fi=0xab545d10)
 
-sfs_getattr(path="/", statbuf=0x50a31bf0)
+sfs_getattr(path="/", statbuf=0xaa543bf0)
 
 sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51232c50)
+sfs_opendir(path="/", fi=0xaad44c50)
 
 sfs_readdir(path="/")
 
 sfs_readdir path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/2.txt", statbuf=0x50a31c20)
+sfs_getattr(path="/1.txt", statbuf=0xaa543c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
+path_2_ino_internal num_dentries=1
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
+path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
+path_2_ino: Dentry found ino = 1
 path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_getattr(path="/3.txt", statbuf=0x51232c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino_internal Entry1 = 3.txt, path=3.txt, 5, 5
-path_2_ino: Dentry found ino = 3
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=3
- inode number 3 successfully found
-sfs_getattr(path="/", statbuf=0x51232bf0)
+ here block_offset=0 inside_block_offset=1
+ inode number 1 successfully found
+sfs_getattr(path="/", statbuf=0xaa543bf0)
 
 sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-sfs_getattr(path="/", statbuf=0x51a33bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x50a31c50)
+sfs_opendir(path="/", fi=0xaad44c50)
 
 sfs_readdir(path="/")
 
 sfs_readdir path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/3.txt", statbuf=0x51232c20)
+sfs_getattr(path="/1.txt", statbuf=0xaad44c20)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
+path_2_ino_internal num_dentries=1
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino_internal Entry1 = 3.txt, path=3.txt, 5, 5
-path_2_ino: Dentry found ino = 3
+path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
+path_2_ino: Dentry found ino = 1
 path_2_ino: test out
 path_2_ino: test outer
 sfs_getattr path found
- here block_offset=0 inside_block_offset=3
- inode number 3 successfully found
-sfs_getattr(path="/", statbuf=0x51a33bf0)
+ here block_offset=0 inside_block_offset=1
+ inode number 1 successfully found
+sfs_getattr(path="/", statbuf=0xab545bf0)
 
 sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-sfs_opendir(path="/", fi=0x50a31c50)
+sfs_opendir(path="/", fi=0xaa543c50)
 
 sfs_readdir(path="/")
 
 sfs_readdir path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
- read_dentries num_entries=2
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-sfs_getattr(path="/", statbuf=0x51232bf0)
+sfs_getattr(path="/", statbuf=0xaad44bf0)
 
 sfs_getattr path found
  here block_offset=0 inside_block_offset=0
- inode number 0 successfully foundsfs_unlink(path="/3.txt")
+ inode number 0 successfully found
+sfs_open(path"/1.txt", fi=0xab545d10)
+
+sfs_write(path="/1.txt", buf=0xac124060, size=5, offset=0, fi=0xaad44d80)
 
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-path_2_ino_internal num_dentries=2
- read_dentries num_entries=2
+path_2_ino_internal num_dentries=1
+ read_dentries num_entries=1
 read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-path_2_ino_internal Entry0 = 2.txt, path=3.txt, 5, 5
-path_2_ino: test else
-path_2_ino_internal Entry1 = 3.txt, path=3.txt, 5, 5
-path_2_ino: Dentry found ino = 3
+path_2_ino_internal Entry0 = 1.txt, path=1.txt, 5, 5
+path_2_ino: Dentry found ino = 1
 path_2_ino: test out
 path_2_ino: test outer
- here block_offset=0 inside_block_offset=3
- inode number 3 successfully found
-Success: Data block added to the free list
-update_block_bitmap Successful update
-Success: Inode added to the free list
-update_inode_bitmap Successful updateinode removed..now proceeding to remove dentry
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=2
-read_dentry_from_block Entries read = 0
-read_dentry_from_block Entries read = 1
-Entry to be deleted found
-update_block_data Successful update
+sfs_write path found
+ here block_offset=0 inside_block_offset=1
+ inode number 1 successfully found
+update_block_data Successful updateBlock id = 0 written 5 bytes
 update_inode_data Successful update
- Item deleted successfully
-sfs_getattr(path="/", statbuf=0x51232bf0)
+sfs_release(path="/1.txt", fi=0xab545d10)
 
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_getattr(path="/", statbuf=0x51a33bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x50a31c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-sfs_getattr(path="/2.txt", statbuf=0x51a33c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_getattr(path="/", statbuf=0x51a33bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-sfs_getattr(path="/2.txt", statbuf=0x50a31c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_getattr(path="/", statbuf=0x50a31bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0x51232c50)
-
-sfs_readdir(path="/")
-
-sfs_readdir path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-sfs_getattr(path="/", statbuf=0x50a31bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_getattr(path="/2.txt", statbuf=0x51232c20)
-
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-path_2_ino_internal num_dentries=1
- read_dentries num_entries=1
-read_dentry_from_block Entries read = 0
-path_2_ino_internal Entry0 = 2.txt, path=2.txt, 5, 5
-path_2_ino: Dentry found ino = 2
-path_2_ino: test out
-path_2_ino: test outer
-sfs_getattr path found
- here block_offset=0 inside_block_offset=2
- inode number 2 successfully found
-sfs_destroy(userdata=0x0106b010)
+sfs_destroy(userdata=0x00987010)
