@@ -9,94 +9,26 @@ sfs_init()
     capable = 00000ffb
     want = 00000010
     context:
-    fuse = 00959540
+    fuse = 01f3f540
     uid = 0
     gid = 0
     pid = 0
-    private_data = 00958010
-    logfile = 00959060
+    private_data = 01f3e010
+    logfile = 01f3f060
     diskfile = /home/ashish/workspace/code/c/filesystem_CS512/testfilefs
     umask = 00000
 
-sfs_init() num_used_inodes = 1
-sfs_init() num_used_data_blocks = 1
+sfs_init() num_used_inodes = 2
+sfs_init() here it is null
+sfs_init() num_used_data_blocks = 2
 sfs_init() ino_root = 0
-sfs_opendir(path="/", fi=0xfdcb9c50)
+sfs_getattr(path="/.Trash", statbuf=0xa924dc20)
 
-sfs_getattr(path="/.Trash", statbuf=0xfe4bac20)
-
-sfs_getattr path not found
-sfs_getattr(path="/autorun.inf", statbuf=0xfdcb9c20)
-
-sfs_getattr path not found
-sfs_getattr(path="/.xdg-volume-info", statbuf=0xfd4b8c20)
-
-sfs_getattr path not found
-sfs_getattr(path="/.Trash-1001", statbuf=0xfdcb9c20)
-
-sfs_getattr path not found
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_opendir(path="/", fi=0xfe4bac50)
-
-sfs_getattr(path="/autorun.inf", statbuf=0xfdcb9c20)
-
-sfs_getattr path not found
-sfs_getattr(path="/", statbuf=0xfe4babf0)
-
-sfs_getattr path found
  here block_offset=0 inside_block_offset=0
  inode number 0 successfully found
-sfs_getattr(path="/", statbuf=0xfdcb9bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0xfd4b8c50)
-
-sfs_getattr(path="/", statbuf=0xfd4b8bf0)
-
-sfs_getattr path found
- here block_offset=0 inside_block_offset=0
- inode number 0 successfully found
-sfs_opendir(path="/", fi=0xfdcb9c50)
-
-sfs_destroy(userdata=0x00958010)
+path_2_ino_internal num_dentries=1
+ read_dentries num_entries=1
+read_dentry_from_block Entries read = 0
+path_2_ino_internal Entry0 = abc.txt, path=.Trash, 7, 6
+path_2_ino: test else
+path_2_ino: test out

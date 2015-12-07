@@ -204,6 +204,7 @@ void *sfs_init(struct fuse_conn_info *conn)
 			INIT_LIST_HEAD(&(node->node));
 			if (bitmap_data[block_ptr] == '1') {
 				if (SFS_DATA->free_data_blocks == NULL) {
+				    log_msg("\nsfs_init() here it is null");
 					SFS_DATA->free_data_blocks = &(node->node);
 				} else {
 					list_add_tail(&(node->node), SFS_DATA->free_data_blocks);
@@ -261,24 +262,13 @@ int sfs_getattr(const char *path, struct stat *statbuf)
     uint32_t ino = path_2_ino(path);
     if (ino != SFS_INVALID_INO) {
     	log_msg("\nsfs_getattr path found");
-    	sfs_inode_t *inode = (sfs_inode_t*)malloc(sizeof(sfs_inode_t));
-    	get_inode(ino, inode);
+    	sfs_inode_t inode;
+    	get_inode(ino, &inode);
 
-    	statbuf->st_dev = SFS_MAGIC_NUM;
-    	statbuf->st_ino = inode->ino;
-    	statbuf->st_mode = inode->mode;
-    	statbuf->st_nlink = inode->nlink;
-    	statbuf->st_uid = getuid();
-    	statbuf->st_gid = getgid();
-    	statbuf->st_rdev = 0;
-    	statbuf->st_size = inode->size;
-    	statbuf->st_blksize = BLOCK_SIZE;
-    	statbuf->st_blocks = inode->nblocks;
-    	statbuf->st_atime = inode->atime;
-    	statbuf->st_mtime = inode->mtime;
-    	statbuf->st_ctime = inode->ctime;
+    	fill_stat_from_ino(&inode, statbuf);
     } else {
     	log_msg("\nsfs_getattr path not found");
+    	retstat = -ENOENT;
     }
 
     return retstat;
@@ -302,6 +292,9 @@ int sfs_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     log_msg("\nsfs_create(path=\"%s\", mode=0%03o, fi=0x%08x)\n",
 	    path, mode, fi);
     
+    uint32_t ino = create_inode(path, mode);
+    log_msg("\nFile creation success inode = %d", ino);
+
     return retstat;
 }
 
@@ -406,7 +399,9 @@ int sfs_mkdir(const char *path, mode_t mode)
     int retstat = 0;
     log_msg("\nsfs_mkdir(path=\"%s\", mode=0%3o)\n",
 	    path, mode);
-   
+
+    uint32_t ino = create_inode(path, mode);
+    log_msg("\nFile creation success inode = %d", ino);
     
     return retstat;
 }
@@ -466,6 +461,30 @@ int sfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	       struct fuse_file_info *fi)
 {
     int retstat = 0;
+
+    log_msg("\nsfs_readdir(path=\"%s\")\n", path);
+
+    filler(buf, ".", NULL, 0);
+	filler(buf, "..", NULL, 0);
+	uint32_t ino = path_2_ino(path);
+	if (ino != SFS_INVALID_INO) {
+		log_msg("\nsfs_readdir path found");
+		sfs_inode_t inode;
+		get_inode(ino, &inode);
+
+		int num_dentries = (inode.size / SFS_DENTRY_SIZE);
+		sfs_dentry_t* dentries = malloc(sizeof(sfs_dentry_t) * num_dentries);
+	    read_dentries(&inode, dentries);
+
+	    int i = 0;
+	    for (i = 0; i < num_dentries; ++i) {
+	    	filler(buf, dentries[i].name, NULL, 0);
+	    }
+
+	    free(dentries);
+	} else {
+		log_msg("\nsfs_readdir path not found");
+	}
 
     return retstat;
 }
@@ -531,6 +550,8 @@ int main(int argc, char *argv[])
     argc--;
     
     sfs_data->logfile = log_open();
+    sfs_data->free_data_blocks = NULL;
+    sfs_data->free_inodes = NULL;
     
     // turn over control to fuse
     fprintf(stderr, "about to call fuse_main, %s \n", sfs_data->diskfile);

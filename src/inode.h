@@ -13,7 +13,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <stdint.h>
+#include <fuse.h>
 
 #define SFS_NDIR_BLOCKS		12 						// Number of direct blocks
 #define SFS_IND_BLOCK		SFS_NDIR_BLOCKS 		// Index of indirect block
@@ -43,6 +45,7 @@
 #define SFS_DENTRY_SIZE 64
 
 #define SFS_INVALID_INO (SFS_NINODES)
+#define SFS_INVALID_BLOCK_NO (SFS_NBLOCKS_DATA)
 
 typedef struct {
 	uint32_t   	ino;     /* inode number */
@@ -64,5 +67,11 @@ typedef struct {
 uint32_t path_2_ino(const char* path);
 
 void get_inode(uint32_t ino, sfs_inode_t *inode_data);
+
+uint32_t create_inode(const char *path, mode_t mode);
+
+void fill_stat_from_ino(const sfs_inode_t* inode, struct stat *statbuf);
+
+void read_dentries(sfs_inode_t *inode_data, sfs_dentry_t* dentries);
 
 #endif /* SRC_INODE_H_ */
