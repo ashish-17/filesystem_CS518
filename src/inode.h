@@ -47,7 +47,7 @@
 #define SFS_INVALID_INO (SFS_NINODES)
 #define SFS_INVALID_BLOCK_NO (SFS_NBLOCKS_DATA)
 
-typedef struct {
+typedef struct __attribute__((packed)) {
 	uint32_t   	ino;     /* inode number */
 	uint32_t	mode;	/* Flags related to file mode (Dir/file/link)*/
     uint32_t   	nlink;   /* number of hard links */
@@ -57,12 +57,12 @@ typedef struct {
     uint32_t   	mtime;   /* time of last modification */
     uint32_t    ctime;   /* time of last status change */
 	uint32_t 	blocks[SFS_N_BLOCKS]; 	/* Size  = 4 * 15 = 60 bytes */
-} sfs_inode_t  __attribute__((packed));
+} sfs_inode_t;
 
-typedef struct {
+typedef struct __attribute__((packed)) {
 	uint32_t inode_number;
 	char name[SFS_MAX_LENGTH_FILE_NAME]; /* File name */
-} sfs_dentry_t __attribute__((packed));
+} sfs_dentry_t;
 
 uint32_t path_2_ino(const char* path);
 

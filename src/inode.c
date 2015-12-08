@@ -218,7 +218,7 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 	}
 
 	inode_data->nblocks += num_new_blocks;
-	inode_data->size = (inode_data->size - orig_offset) + size;
+	inode_data->size = orig_offset + size;
 
 	update_inode_data(inode_data->ino, inode_data);
 
@@ -252,7 +252,7 @@ int read_inode(sfs_inode_t *inode_data, char* buffer, int size, int offset) {
 			block_read(SFS_BLOCK_DATA + inode_data->blocks[i], tmp_buf);
 			memcpy(buffer + bytes_read, tmp_buf, bytes_to_read);
 
-			log_msg("\Read block %d offset = %d num bytes read = %d",inode_data->blocks[i], offset, bytes_to_read);
+			log_msg("\nRead block %d offset = %d num bytes read = %d",inode_data->blocks[i], offset, bytes_to_read);
 
 			bytes_read += bytes_to_read;
 

@@ -34,7 +34,7 @@
 
 #define SFS_MAGIC_NUM 1707
 
-typedef struct {
+typedef struct __attribute__((packed)) {
 	uint32_t magic;
 	uint32_t num_data_blocks; // Total number of data blocks on disk.
 	uint32_t num_free_blocks; // Total number of free blocks.
@@ -42,7 +42,7 @@ typedef struct {
 	uint32_t bitmap_inode_blocks;
 	uint32_t bitmap_data_blocks;
 	uint32_t inode_root;  // Root directory.
-} sfs_superblock __attribute__((packed));
+} sfs_superblock;
 
 /*
  * Use the root directory to get the full path for the input relative path
@@ -243,6 +243,15 @@ void sfs_destroy(void *userdata)
 {
     log_msg("\nsfs_destroy(userdata=0x%08x)\n", userdata);
     disk_close();
+
+    free(SFS_DATA->state_inodes);
+    SFS_DATA->state_inodes = NULL;
+
+    free(SFS_DATA->state_data_blocks);
+    SFS_DATA->state_data_blocks = NULL;
+
+    SFS_DATA->free_inodes = NULL;
+    SFS_DATA->free_data_blocks = NULL;
 }
 
 /** Get file attributes.
@@ -320,10 +329,20 @@ int sfs_unlink(const char *path)
  */
 int sfs_open(const char *path, struct fuse_file_info *fi)
 {
-    int retstat = 0;
+    int retstat = -ENOENT;
     log_msg("\nsfs_open(path\"%s\", fi=0x%08x)\n",
 	    path, fi);
 
+	uint32_t ino = path_2_ino(path);
+	if (ino != SFS_INVALID_INO) {
+		sfs_inode_t inode;
+		get_inode(ino, &inode);
+		if (S_ISREG(inode.mode)) {
+			retstat = 0;
+		}
+	} else {
+		log_msg("\nNot a valid file");
+	}
     
     return retstat;
 }
@@ -348,6 +367,7 @@ int sfs_release(const char *path, struct fuse_file_info *fi)
     log_msg("\nsfs_release(path=\"%s\", fi=0x%08x)\n",
 	  path, fi);
     
+    // No saved data related to any file which needs to be freed.
 
     return retstat;
 }
@@ -454,7 +474,17 @@ int sfs_opendir(const char *path, struct fuse_file_info *fi)
     int retstat = 0;
     log_msg("\nsfs_opendir(path=\"%s\", fi=0x%08x)\n",
 	  path, fi);
-    
+
+	uint32_t ino = path_2_ino(path);
+	if (ino != SFS_INVALID_INO) {
+		sfs_inode_t inode;
+		get_inode(ino, &inode);
+		if (S_ISDIR(inode.mode)) {
+			retstat = 0;
+		}
+	} else {
+		log_msg("\nNot a valid file");
+	}
     
     return retstat;
 }
