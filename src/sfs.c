@@ -391,14 +391,16 @@ int sfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 
 	uint32_t ino = path_2_ino(path);
 	if (ino != SFS_INVALID_INO) {
-		log_msg("\nsfs_write path found");
+		log_msg("\nsfs_read path found");
 		sfs_inode_t inode;
 		get_inode(ino, &inode);
+
+		log_msg("\nsfs_read got the inode");
 
 		retstat = read_inode(&inode, buf, size, offset);
 		log_msg("\nData read = %s", buf);
 	} else {
-		log_msg("\nsfs_write path not found");
+		log_msg("\nsfs_read path not found");
 		retstat = -ENOENT;
 	}
 

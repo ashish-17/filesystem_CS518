@@ -225,6 +225,7 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 
 int read_inode(sfs_inode_t *inode_data, char* buffer, int size, int offset) {
 
+	log_msg("\nread_inode");
 	int i = 0;
 	int orig_offset = offset;
 	char tmp_buf[BLOCK_SIZE];
@@ -248,10 +249,13 @@ int read_inode(sfs_inode_t *inode_data, char* buffer, int size, int offset) {
 		} else {
 			int bytes_to_read = (inode_data->size - bytes_read) > BLOCK_SIZE ? BLOCK_SIZE : (inode_data->size - bytes_to_read);
 			block_read(SFS_BLOCK_DATA + inode_data->blocks[i], tmp_buf);
+			log_msg("\ntmp_buf = %s", tmp_buf);
 			memcpy(buffer + bytes_read, tmp_buf, bytes_to_read);
 
-			log_msg("\nRead block %d offset = %d num bytes read = %d",inode_data->blocks[i], offset, bytes_to_read);
+			//log_msg("\nRead block %d offset = %d num bytes read = %d",inode_data->blocks[i], offset, bytes_to_read);
 
+			log_msg("\nRead Buffer = %s", buffer);
+			log_msg("\ntmp_buf1 = %s", tmp_buf);
 			bytes_read += bytes_to_read;
 		}
 	}
