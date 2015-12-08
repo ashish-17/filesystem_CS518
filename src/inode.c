@@ -66,19 +66,14 @@ uint32_t path_2_ino_internal(const char *path, uint32_t ino_parent) {
 
 	    int i = 0;
 	    for (i = 0; i < num_dentries; ++i) {
-			log_msg("\npath_2_ino_internal Entry%d = %s, path=%s, %d, %d", i, dentries[i].name,path, strlen(dentries[i].name), strlen(path));
+			log_msg("\npath_2_ino_internal Entry%d = %s, path=%s", i, dentries[i].name,path);
 	    	if (strcmp(dentries[i].name, path) == 0) {
 	    		ino_path = dentries[i].inode_number;
 	    		log_msg("\npath_2_ino: Dentry found ino = %d", ino_path);
 
 	    		break;
-	    	} else {
-
-	    		log_msg("\npath_2_ino: test else");
 	    	}
 	    }
-
-		log_msg("\npath_2_ino: test out");
 	    free(dentries);
 	}
 
@@ -195,7 +190,7 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 		if (i >= inode_data->nblocks) {
 			inode_data->blocks[i] = get_block_no();
 			++num_new_blocks;
-			log_msg("Allocated a new block for file");
+			log_msg("\nAllocated a new block for file");
 		}
 
 		if (offset != 0) {
@@ -206,7 +201,7 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 
 			bytes_written += bytes_to_write;
 
-			log_msg("Offset = %d written %d bytes", offset, bytes_written);
+			log_msg("\nOffset = %d written %d bytes", offset, bytes_written);
 
 			offset = 0;
 		} else {
@@ -214,9 +209,11 @@ int write_inode(sfs_inode_t *inode_data, const char* buffer, int size, int offse
 			memcpy(tmp_buf, buffer + bytes_written, bytes_to_write);
 			update_block_data(inode_data->blocks[i], tmp_buf);
 
+			log_msg("\nUpdated block %d offset = %d num bytes written = %d",inode_data->blocks[i], offset, bytes_to_write);
+
 			bytes_written += bytes_to_write;
 
-			log_msg("Block id = %d written %d bytes of %s", i, bytes_to_write, buffer);
+			log_msg("\nBlock id = %d written %d bytes of %s", i, bytes_to_write, tmp_buf);
 		}
 	}
 
@@ -252,8 +249,10 @@ int read_inode(sfs_inode_t *inode_data, char* buffer, int size, int offset) {
 			offset = 0;
 		} else {
 			int bytes_to_read = (inode_data->size - bytes_read) > BLOCK_SIZE ? BLOCK_SIZE : (inode_data->size - bytes_to_read);
-			block_read(SFS_BLOCK_INODES + inode_data->blocks[i], tmp_buf);
+			block_read(SFS_BLOCK_DATA + inode_data->blocks[i], tmp_buf);
 			memcpy(buffer + bytes_read, tmp_buf, bytes_to_read);
+
+			log_msg("\Read block %d offset = %d num bytes read = %d",inode_data->blocks[i], offset, bytes_to_read);
 
 			bytes_read += bytes_to_read;
 
